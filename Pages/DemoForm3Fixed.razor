@@ -8,7 +8,7 @@
 <p>This is the same as the third form, except with a modified version of Blazored.FluentValidation.</p>
 
 <EditForm Model="@Customer" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
-    <FluentValidationValidator />
+    <FluentValidationValidator Options="@(strategy => strategy.IncludeRuleSets("*"))" />
     <ValidationSummary />
 
     <DemoForm IsValid="IsValid" Customer="Customer" />
