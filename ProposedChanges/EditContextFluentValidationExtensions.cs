@@ -1,12 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Internal;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.Extensions.DependencyInjection;
 using static FluentValidation.AssemblyScanner;
 
 namespace ProposedChanges.Blazored.FluentValidation;
@@ -21,6 +16,9 @@ public static class EditContextFluentValidationExtensions
     public static void AddFluentValidation(this EditContext editContext, IServiceProvider serviceProvider, bool disableAssemblyScanning, IValidator? validator, FluentValidationValidator fluentValidationValidator)
     {
         ArgumentNullException.ThrowIfNull(editContext, nameof(editContext));
+
+        ValidatorOptions.Global.ValidatorSelectors.CompositeValidatorSelectorFactory =
+            (selectors) => new IntersectingCompositeValidatorSelector(selectors);
 
         var messages = new ValidationMessageStore(editContext);
 
@@ -91,30 +89,32 @@ public static class EditContextFluentValidationExtensions
 
         if (fluentValidationValidator.ValidateOptions is not null)
         {
-            context = ValidationContext<object>.CreateWithOptions(editContext.Model, (options) =>
-            {
-                fluentValidationValidator.ValidateOptions(options);
-            });
+            context = ValidationContext<object>.CreateWithOptions(editContext.Model, fluentValidationValidator.ValidateOptions);
         }
         else if (fluentValidationValidator.Options is not null)
         {
-            context = ValidationContext<object>.CreateWithOptions(editContext.Model, (options) =>
-            {
-                fluentValidationValidator.Options(options);
-            });
+            context = ValidationContext<object>.CreateWithOptions(editContext.Model, fluentValidationValidator.Options);
         }
         else
         {
             context = new ValidationContext<object>(editContext.Model);
         }
 
+        var fluentValidationValidatorSelector = context.Selector;
+        var changedPropertySelector = ValidationContext<object>.CreateWithOptions(editContext.Model, strategy =>
+        {
+            strategy.IncludeProperties(propertyPath);
+        }).Selector;
+        
+        var compositeSelector =
+            new IntersectingCompositeValidatorSelector(new IValidatorSelector[] { fluentValidationValidatorSelector, changedPropertySelector });
+
         validator ??= GetValidatorForModel(serviceProvider, editContext.Model, disableAssemblyScanning);
         
         if (validator is not null)
         {
-            var validationResults = await validator.ValidateAsync(context);
+            var validationResults = await validator.ValidateAsync(new ValidationContext<object>(editContext.Model, new PropertyChain(), compositeSelector));
             var errorMessages = validationResults.Errors
-                .Where(validationFailure => validationFailure.PropertyName == propertyPath)
                 .Select(validationFailure => validationFailure.ErrorMessage)
                 .Distinct();
 
