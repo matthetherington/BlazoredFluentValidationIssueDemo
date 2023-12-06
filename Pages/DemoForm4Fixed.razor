@@ -1,0 +1,15 @@
+﻿@page "/4-fixed"
+@using ProposedChanges.Blazored.FluentValidation
+
+<PageTitle>Demo Form 4 - Fixed</PageTitle>
+
+<h1>Demo Form 4 - Fixed</h1>
+
+<p>This is the same as the fourth form, except with a modified version of Blazored.FluentValidation.</p>
+
+<EditForm Model="@Customer" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+    <FluentValidationValidator Options="@(strategy => strategy.IncludeRuleSets("AddressOnly"))" />
+    <ValidationSummary/>
+
+    <DemoForm IsValid="IsValid" Customer="Customer" />
+</EditForm>

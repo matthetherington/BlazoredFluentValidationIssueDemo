@@ -1,0 +1,38 @@
+﻿@page "/"
+@using Blazored.FluentValidation
+@using BlazoredFluentValidation.Entities
+@using FluentValidation
+@inject IValidator<Customer> Validator
+
+<PageTitle>Demo Form 1</PageTitle>
+
+<h1>Demo Form 1</h1>
+
+<p>
+    In this form, an instance of CustomerValidator is specified when including Blazored.FluentValidationValidator:
+    <pre>@("<FluentValidationValidator Validator=\"@Validator\" />")</pre>
+</p>
+
+<p>
+    Leaving the form empty and clicking validate will work as expected and validate the form using the CustomerValidator.
+</p>
+
+<p>
+    If you then click into the Primary Address Line 1 field, enter something, and blur from it, an exception is thrown.
+</p>
+
+<p>
+    This is because the delegate passed to EditContext.OnFieldChanged receives a FieldIdentifier for
+    the changed value. FieldIdentifier.Model which is of type Address is passed to the supplied IValidator@("<Customer>"), which throws.
+</p>
+
+<p>
+    See <a href="https://github.com/Blazored/FluentValidation/blob/main/src/Blazored.FluentValidation/EditContextFluentValidationExtensions.cs#L80">https://github.com/Blazored/FluentValidation/blob/main/src/Blazored.FluentValidation/EditContextFluentValidationExtensions.cs#L80</a>
+</p>
+
+<EditForm Model="@Customer" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+    <FluentValidationValidator Validator="@Validator" Options="@(strategy => strategy.IncludeRuleSets("*"))" />
+    <ValidationSummary/>
+
+    <DemoForm IsValid="IsValid" Customer="Customer" />
+</EditForm>

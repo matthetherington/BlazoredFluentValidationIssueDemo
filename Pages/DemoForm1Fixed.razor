@@ -1,0 +1,23 @@
+﻿@page "/1-fixed"
+@using ProposedChanges.Blazored.FluentValidation
+@using BlazoredFluentValidation.Entities
+@using FluentValidation
+@inject IValidator<Customer> Validator
+
+<PageTitle>Demo Form 1 - Fixed</PageTitle>
+
+<h1>Demo Form 1 - Fixed</h1>
+
+<p>This is the same as the first form, except with a modified version of Blazored.FluentValidation.</p>
+
+<p>
+    The CustomerValidator is used to validate the model, and any messages for the path Address[].Line1 result in a
+    validation failure for the field.
+</p>
+
+<EditForm Model="@Customer" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+    <FluentValidationValidator Validator="@Validator" Options="@(strategy => strategy.IncludeRuleSets("*"))" />
+    <ValidationSummary/>
+
+    <DemoForm IsValid="IsValid" Customer="Customer" />
+</EditForm>

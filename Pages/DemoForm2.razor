@@ -1,0 +1,37 @@
+﻿@page "/2"
+@using Blazored.FluentValidation
+
+<PageTitle>Demo Form 2</PageTitle>
+
+<h1>Demo Form 2</h1>
+
+<p>
+    If the Validator option is not provided to @("<FluentValidationValidator />"), then a validator is retrieved
+    from DI (or the assembly), however the delegate passed to EditContext.OnFieldChanged receives a FieldIdentifier
+    containing the property name and a reference to the object on which it changed. FieldIdentifier.Model is used to
+    locate a corresponding validator, but as the changed field is an Address property, in this case that results in a
+    IValidator@("<Address>") instead of IValidator@("<Customer>"), so any rules defined on CustomerValidator
+    affecting address would be ignored.
+</p>
+
+<p>
+    A rule: <pre>RuleFor(customer => customer.PrimaryAddress.Line1).NotEqual("10 Downing Street");</pre> is defined on
+    CustomerValidator. This is not ran on blur, but is ran when validating the whole model.
+</p>
+
+<p>
+    And again, adding an address and entering a single character in the Postcode field results in an error message on blur,
+    because only an IValidator@("<Address>") is used and the rule specifying the PermissiveAddressValidator
+    on CustomerValidator is ignored. Clicking validate makes the error go away, because the CustomerValidator is used.
+</p>
+
+<p>
+    See <a href="https://github.com/Blazored/FluentValidation/blob/main/src/Blazored.FluentValidation/EditContextFluentValidationExtensions.cs#L80">https://github.com/Blazored/FluentValidation/blob/main/src/Blazored.FluentValidation/EditContextFluentValidationExtensions.cs#L80</a>
+</p>
+
+<EditForm Model="@Customer" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+    <FluentValidationValidator Options="@(strategy => strategy.IncludeRuleSets("*"))" />
+    <ValidationSummary/>
+
+    <DemoForm IsValid="IsValid" Customer="Customer" />
+</EditForm>

@@ -1,0 +1,40 @@
+﻿@page "/3"
+@using Blazored.FluentValidation
+
+<PageTitle>Demo Form 3</PageTitle>
+
+<h1>Demo Form 3</h1>
+
+<p>This form is represented by two models - Customer and Address.</p>
+
+<p>
+    Two different address validators exist in this project, PermissiveAddressValidator with only .NotEmpty() rules for
+    each property, and StrictAddressValidator which has more rigorous checks.
+</p>
+
+<p>
+    CustomerValidator calls <pre>RuleForEach(customer => customer.Addresses).SetValidator(new PermissiveAddressValidator());</pre>
+    so one would expect the permissive checks to be used.
+</p>
+
+<p>
+    If you click + Add Address below, and enter a single letter into the Postcode field, when you blur from the field you
+    will see two messages from the StrictAddressValidator:
+</p>
+
+<ul>
+    <li>The length of 'Post Code' must be at least 6 characters. You entered 1 characters.</li>
+    <li>'Post Code' is not in the correct format.</li>
+</ul>
+
+<p>
+    But when you click validate, and the whole model is validated, those two error messages disappear because the
+    PermissiveAddressValidator is used.
+</p>
+
+<EditForm Model="@Customer" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+    <FluentValidationValidator />
+    <ValidationSummary />
+
+    <DemoForm IsValid="IsValid" Customer="Customer" />
+</EditForm>

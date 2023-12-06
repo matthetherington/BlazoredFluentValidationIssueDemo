@@ -1,0 +1,128 @@
+<div class="field">
+    @{
+        var firstNameAttributes = new Dictionary<string, object>()
+        {
+            { "id", "first-name" },
+            { "name", "first-name" }
+        };
+    }
+    <label for="first-name">First Name</label>
+    <InputText AdditionalAttributes="@firstNameAttributes" DisplayName="First Name" @bind-Value="@Customer.FirstName"/>
+    <ValidationMessage For="() => Customer.FirstName"/>
+</div>
+
+<div class="field">
+    @{
+        var lastNameAttributes = new Dictionary<string, object>()
+        {
+            { "id", "last-name" },
+            { "name", "last-name" }
+        };
+    }
+    <label for="last-name">Last Name</label>
+    <InputText AdditionalAttributes="@lastNameAttributes" DisplayName="Last Name" @bind-Value="@Customer.LastName"/>
+    <ValidationMessage For="() => Customer.LastName"/>
+</div>
+
+<hr/>
+
+<div class="address">
+    <h2>Primary Address</h2>
+    <div class="field">
+        @{
+            var primaryAddressLine1Attributes = new Dictionary<string, object>()
+            {
+                { "id", "primary-address-line-1" },
+                { "name", "primary-address-line-1" }
+            };
+        }
+        <label for="primary-address-line-1">Address Line 1</label>
+        <InputText AdditionalAttributes="@primaryAddressLine1Attributes" DisplayName="Address Line 1" @bind-Value="@Customer.PrimaryAddress.Line1"/>
+        <ValidationMessage For="() => Customer.PrimaryAddress.Line1"/>
+    </div>
+
+    <div class="field">
+        @{
+            var primaryAddressLine2Attributes = new Dictionary<string, object>()
+            {
+                { "id", "primary-address-line-2" },
+                { "name", "primary-address-line-2" }
+            };
+        }
+        <label for="primary-address-line-2">Address Line 2</label>
+        <InputText AdditionalAttributes="@primaryAddressLine2Attributes" DisplayName="Address Line 2" @bind-Value="@Customer.PrimaryAddress.Line2"/>
+        <ValidationMessage For="() => Customer.PrimaryAddress.Line2"/>
+    </div>
+
+    <div class="field">
+        @{
+            var primaryPostcodeAttributes = new Dictionary<string, object>()
+            {
+                { "id", "primary-address-postcode" },
+                { "name", "primary-address-postcode" }
+            };
+        }
+        <label for="primary-address-postcode">Postcode</label>
+        <InputText AdditionalAttributes="@primaryPostcodeAttributes" DisplayName="Postcode" @bind-Value="@Customer.PrimaryAddress.PostCode"/>
+        <ValidationMessage For="() => Customer.PrimaryAddress.PostCode"/>
+    </div>
+</div>
+
+<button type="button" @onclick="@Customer.AddEmptyAddress">+ Add Address</button>
+
+@for (var i = 0; i < Customer.OtherAddresses.Count; i++)
+{
+    var address = Customer.OtherAddresses[i];
+    var addressNumber = i + 2;
+        
+    <div class="address">
+        <h2>Address @(addressNumber)</h2>
+        <div class="field">
+            @{
+                var addressLine1Attributes = new Dictionary<string, object>()
+                {
+                    { "id", $"address-{addressNumber}-line-1" },
+                    { "name", $"address-{addressNumber}-line-1" }
+                };
+            }
+            <label for="@($"address-{addressNumber}-line-1")">Address Line 1</label>
+            <InputText AdditionalAttributes="@addressLine1Attributes" DisplayName="Address Line 1" @bind-Value="@address.Line1"/>
+            <ValidationMessage For="() => address.Line1"/>
+        </div>
+
+        <div class="field">
+            @{
+                var addressLine2Attributes = new Dictionary<string, object>()
+                {
+                    { "id", $"address-{addressNumber}-line-2" },
+                    { "name", $"address-{addressNumber}-line-2" }
+                };
+            }
+            <label for="@($"address-{addressNumber}-line-2")">Address Line 2</label>
+            <InputText AdditionalAttributes="@addressLine2Attributes" DisplayName="Address Line 2" @bind-Value="@address.Line2"/>
+            <ValidationMessage For="() => address.Line2"/>
+        </div>
+
+        <div class="field">
+            @{
+                var postcodeAttributes = new Dictionary<string, object>()
+                {
+                    { "id", $"address-{addressNumber}-postcode" },
+                    { "name", $"address-{addressNumber}-postcode" }
+                };
+            }
+            <label for="@($"address-{addressNumber}-postcode")">Postcode</label>
+            <InputText AdditionalAttributes="@postcodeAttributes" DisplayName="Postcode" @bind-Value="@address.PostCode"/>
+            <ValidationMessage For="() => address.PostCode"/>
+        </div>
+    </div>
+
+    @if (address != Customer.OtherAddresses.Last())
+    {
+        <hr/>
+    }
+}
+
+<button class="validate-button" type="submit">Validate</button>
+
+<div class="validation-status">Is Valid? @(IsValid.HasValue ? IsValid.Value : "Unvalidated")</div>
