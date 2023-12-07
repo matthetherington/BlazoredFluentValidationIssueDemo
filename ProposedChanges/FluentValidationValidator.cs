@@ -1,14 +1,14 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Internal;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using FluentValidation.Results;
 
-namespace ProposedChanges.Blazored.FluentValidation;
+namespace BlazoredFluentValidation.ProposedChanges.Blazored.FluentValidation;
 
+/**
+ * See https://github.com/Blazored/FluentValidation/pull/205
+ */
 public class FluentValidationValidator : ComponentBase
 {
     [Inject]

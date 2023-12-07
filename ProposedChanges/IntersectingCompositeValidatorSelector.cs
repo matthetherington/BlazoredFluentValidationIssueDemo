@@ -1,8 +1,11 @@
 using FluentValidation;
 using FluentValidation.Internal;
 
-namespace ProposedChanges.Blazored.FluentValidation;
+namespace BlazoredFluentValidation.ProposedChanges.Blazored.FluentValidation;
 
+/**
+ * See https://github.com/Blazored/FluentValidation/pull/205
+ */
 internal class IntersectingCompositeValidatorSelector : IValidatorSelector {
     private readonly IEnumerable<IValidatorSelector> _selectors;
 
