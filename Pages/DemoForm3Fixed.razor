@@ -5,11 +5,17 @@
 
 <h1>Demo Form 3 - Fixed</h1>
 
-<p>This is the same as the third form, except with a modified version of Blazored.FluentValidation.</p>
+<p>This is the same as the fourth form, except with a modified version of Blazored.FluentValidation.</p>
+
+<p>
+    Entering Dave as the first name does not produce a validation error on blur, because the default behaviour of
+    only executing the default rule set is used, as described by the Fluent docs at
+    <a href="https://docs.fluentvalidation.net/en/latest/rulesets.html">https://docs.fluentvalidation.net/en/latest/rulesets.html</a>.
+</p>
 
 <EditForm Model="@Customer" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
-    <FluentValidationValidator Options="@(strategy => strategy.IncludeRuleSets("*"))" />
-    <ValidationSummary />
+    <FluentValidationValidator Options="@(strategy => strategy.IncludeRuleSets("AddressOnly"))" />
+    <ValidationSummary/>
 
     <DemoForm IsValid="IsValid" Customer="Customer" />
 </EditForm>

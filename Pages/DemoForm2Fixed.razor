@@ -7,6 +7,11 @@
 
 <p>This is the same as the second form, except with a modified version of Blazored.FluentValidation.</p>
 
+<p>
+    Entering 10 Downing Street as Address Line 1 results in a validation error on blur,
+    nor does entering a single character into the postcode field, consistent with form submission.
+</p>
+
 <EditForm Model="@Customer" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
     <FluentValidationValidator Options="@(strategy => strategy.IncludeRuleSets("*"))" />
     <ValidationSummary/>

@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace BlazoredFluentValidation.ProposedChanges.Blazored.FluentValidation;
 
-/**
- * See https://github.com/Blazored/FluentValidation/pull/205
- */
 internal static class PropertyPathHelper
 {
     private class Node

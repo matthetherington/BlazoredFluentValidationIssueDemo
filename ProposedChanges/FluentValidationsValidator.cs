@@ -1,3 +1,4 @@
+﻿using System;
 using FluentValidation;
 using FluentValidation.Internal;
 using Microsoft.AspNetCore.Components;
@@ -6,26 +7,15 @@ using FluentValidation.Results;
 
 namespace BlazoredFluentValidation.ProposedChanges.Blazored.FluentValidation;
 
-/**
- * See https://github.com/Blazored/FluentValidation/pull/205
- */
 public class FluentValidationValidator : ComponentBase
 {
-    [Inject]
-    private IServiceProvider ServiceProvider { get; set; } = default!;
+    [Inject] private IServiceProvider ServiceProvider { get; set; } = default!;
 
-    [CascadingParameter]
-    private EditContext? CurrentEditContext { get; set; }
+    [CascadingParameter] private EditContext? CurrentEditContext { get; set; }
 
-    [Parameter]
-    public IValidator? Validator { get; set; }
-
-    [Parameter]
-    public bool DisableAssemblyScanning { get; set; }
-
-    [Parameter]
-    public Action<ValidationStrategy<object>>? Options { get; set; }
-
+    [Parameter] public IValidator? Validator { get; set; }
+    [Parameter] public bool DisableAssemblyScanning { get; set; }
+    [Parameter] public Action<ValidationStrategy<object>>? Options { get; set; }
     internal Action<ValidationStrategy<object>>? ValidateOptions { get; set; }
 
     public bool Validate(Action<ValidationStrategy<object>>? options = null)

@@ -31,7 +31,7 @@
 </p>
 
 <EditForm Model="@Customer" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
-    <FluentValidationValidator Validator="@Validator" Options="@(strategy => strategy.IncludeRuleSets("*"))" />
+    <FluentValidationValidator Validator="@Validator"/>
     <ValidationSummary/>
 
     <DemoForm IsValid="IsValid" Customer="Customer" />

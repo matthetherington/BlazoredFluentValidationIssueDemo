@@ -1,13 +1,11 @@
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Internal;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.DependencyInjection;
 using static FluentValidation.AssemblyScanner;
 
 namespace BlazoredFluentValidation.ProposedChanges.Blazored.FluentValidation;
 
-/**
- * See https://github.com/Blazored/FluentValidation/pull/205
- */
 public static class EditContextFluentValidationExtensions
 {
     private static readonly char[] Separators = { '.', '[' };
